@@ -6,11 +6,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// A Calculator.
-
 class PrettyTextField extends StatefulWidget {
   const PrettyTextField({
     Key? key,
+    this.borderColor = Colors.red,
     this.labelText,
     this.width,
     this.autocorrect = true,
@@ -57,6 +56,7 @@ class PrettyTextField extends StatefulWidget {
     this.controller,
   }) : super(key: key);
 
+  final Color borderColor;
   final String? labelText;
   final double? width;
   final bool autocorrect;
@@ -272,6 +272,14 @@ class ErrorTextField extends StatefulWidget {
 }
 
 class _ErrorTextFieldState extends State<ErrorTextField> {
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -292,7 +300,7 @@ class _ErrorTextFieldState extends State<ErrorTextField> {
           borderSide: BorderSide(color: Color(0xFF6200EE)),
         ),
       ),
-      controller: widget.controller,
+      controller: controller,
       textAlign: widget.textAlign,
       autocorrect: widget.autocorrect,
       autofillHints: widget.autofillHints,
