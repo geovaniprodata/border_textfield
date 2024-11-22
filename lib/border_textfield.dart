@@ -54,6 +54,7 @@ class BorderTextField extends StatefulWidget {
     this.contextMenuBuilder,
     this.textAlign = TextAlign.start,
     this.controller,
+    this.labelStyle,
   }) : super(key: key);
 
   final Color borderColor;
@@ -101,6 +102,7 @@ class BorderTextField extends StatefulWidget {
   final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
   final TextAlign textAlign;
   final TextEditingController? controller;
+  final TextStyle? labelStyle;
 
   @override
   State<BorderTextField> createState() => _BorderTextFieldState();
@@ -125,6 +127,7 @@ class _BorderTextFieldState extends State<BorderTextField> {
         decoration: InputDecoration(
           border: InputBorder.none,
           labelText: widget.labelText,
+          labelStyle: widget.labelStyle,
         ),
         controller: controller,
         textAlign: widget.textAlign,
@@ -220,6 +223,9 @@ class ErrorTextField extends StatefulWidget {
     this.contextMenuBuilder,
     this.textAlign = TextAlign.start,
     this.controller,
+    this.labelStyle = const TextStyle(
+      color: Color(0xFF6200EE),
+    ),
   }) : super(key: key);
 
   final String? labelText;
@@ -266,6 +272,7 @@ class ErrorTextField extends StatefulWidget {
   final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
   final TextAlign textAlign;
   final TextEditingController? controller;
+  final TextStyle labelStyle;
 
   @override
   State<ErrorTextField> createState() => _ErrorTextFieldState();
@@ -286,18 +293,16 @@ class _ErrorTextFieldState extends State<ErrorTextField> {
       cursorColor: Colors.red,
       initialValue: 'Input text',
       maxLength: 20,
-      decoration: const InputDecoration(
-        icon: Icon(Icons.favorite),
+      decoration: InputDecoration(
+        icon: const Icon(Icons.favorite),
         labelText: 'Label text',
-        labelStyle: TextStyle(
-          color: Color(0xFF6200EE),
-        ),
+        labelStyle: widget.labelStyle,
         helperText: 'Helper text',
-        suffixIcon: Icon(
+        suffixIcon: const Icon(
           Icons.check_circle,
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF6200EE)),
+          borderSide: BorderSide(color: widget.labelStyle.color!),
         ),
       ),
       controller: controller,
