@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-library pretty_textfield;
+library border_textfield;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PrettyTextField extends StatefulWidget {
-  const PrettyTextField({
+class BorderTextField extends StatefulWidget {
+  const BorderTextField({
     Key? key,
     this.borderColor = Colors.red,
     this.labelText,
@@ -103,10 +103,10 @@ class PrettyTextField extends StatefulWidget {
   final TextEditingController? controller;
 
   @override
-  State<PrettyTextField> createState() => _PrettyTextFieldState();
+  State<BorderTextField> createState() => _BorderTextFieldState();
 }
 
-class _PrettyTextFieldState extends State<PrettyTextField> {
+class _BorderTextFieldState extends State<BorderTextField> {
   late TextEditingController controller;
 
   @override
