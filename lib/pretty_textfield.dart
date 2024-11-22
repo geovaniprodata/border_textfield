@@ -2,47 +2,49 @@
 
 library pretty_textfield;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// A Calculator.
 
 class PrettyTextField extends StatefulWidget {
-  PrettyTextField({
+  const PrettyTextField({
     Key? key,
     this.labelText,
     this.width,
-    this.autocorrect,
+    this.autocorrect = true,
     this.autofillHints,
-    this.autofocus,
+    this.autofocus = false,
     this.buildCounter,
-    this.clipBehavior,
+    this.clipBehavior = Clip.hardEdge,
     this.cursorColor,
     this.cursorHeight,
-    this.cursorWidth,
+    this.cursorWidth = 2.0,
     this.cursorRadius,
-    this.dragStartBehavior,
+    this.dragStartBehavior = DragStartBehavior.start,
     this.enabled,
-    this.enableIMEPersonalizedLearning,
+    this.enableIMEPersonalizedLearning = true,
     this.enableInteractiveSelection,
-    this.enableSuggestions,
-    this.expands,
+    this.enableSuggestions = true,
+    this.expands = false,
     this.focusNode,
     this.inputFormatters,
     this.keyboardAppearance,
     this.keyboardType,
     this.maxLength,
     this.maxLengthEnforcement,
-    this.maxLines,
+    this.maxLines = 1,
     this.minLines,
     this.mouseCursor,
-    this.obscureText,
-    this.obscuringCharacter,
+    this.obscureText = false,
+    this.obscuringCharacter = '•',
     this.onAppPrivateCommand,
     this.onChanged,
     this.onEditingComplete,
     this.onSubmitted,
     this.onTap,
-    this.scrollPadding,
+    this.scrollPadding = const EdgeInsets.all(20.0),
     this.scrollPhysics,
     this.showCursor,
     this.strutStyle,
@@ -50,75 +52,81 @@ class PrettyTextField extends StatefulWidget {
     this.textAlignVertical,
     this.textInputAction,
     this.textDirection,
-    this.toolbarOptions,
-    this.textAlign,
+    this.contextMenuBuilder,
+    this.textAlign = TextAlign.start,
+    this.controller,
   }) : super(key: key);
 
-  final labelText;
-  final width;
-  final autocorrect;
-  final autofillHints;
-  final autofocus;
-  final buildCounter;
-  final clipBehavior;
-  final cursorColor;
-  final cursorHeight;
-  final cursorWidth;
-  final cursorRadius;
-  final dragStartBehavior;
-  final enabled;
-  final enableIMEPersonalizedLearning;
-  final enableInteractiveSelection;
-  final enableSuggestions;
-  final expands;
-  final focusNode;
-  final inputFormatters;
-  final keyboardAppearance;
-  final keyboardType;
-  final maxLength;
-  final maxLengthEnforcement;
-  final maxLines;
-  final minLines;
-  final mouseCursor;
-  final obscureText;
-  final obscuringCharacter;
-  final onAppPrivateCommand;
-  final onChanged;
-  final onEditingComplete;
-  final onSubmitted;
-  final onTap;
-  final scrollPadding;
-  final scrollPhysics;
-  final showCursor;
-  final strutStyle;
-  final style;
-  final textAlignVertical;
-  final textInputAction;
-  final textDirection;
-  final toolbarOptions;
-  final textAlign;
-
-  final TextEditingController controller = TextEditingController();
+  final String? labelText;
+  final double? width;
+  final bool autocorrect;
+  final Iterable<String>? autofillHints;
+  final bool autofocus;
+  final Widget? Function(BuildContext, {required int currentLength, required bool isFocused, required int? maxLength})? buildCounter;
+  final Clip clipBehavior;
+  final Color? cursorColor;
+  final double? cursorHeight;
+  final double cursorWidth;
+  final Radius? cursorRadius;
+  final DragStartBehavior dragStartBehavior;
+  final bool? enabled;
+  final bool enableIMEPersonalizedLearning;
+  final bool? enableInteractiveSelection;
+  final bool enableSuggestions;
+  final bool expands;
+  final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
+  final Brightness? keyboardAppearance;
+  final TextInputType? keyboardType;
+  final int? maxLength;
+  final MaxLengthEnforcement? maxLengthEnforcement;
+  final int? maxLines;
+  final int? minLines;
+  final MouseCursor? mouseCursor;
+  final bool obscureText;
+  final String obscuringCharacter;
+  final void Function(String, Map<String, dynamic>)? onAppPrivateCommand;
+  final void Function(String)? onChanged;
+  final void Function()? onEditingComplete;
+  final void Function(String)? onSubmitted;
+  final void Function()? onTap;
+  final EdgeInsets scrollPadding;
+  final ScrollPhysics? scrollPhysics;
+  final bool? showCursor;
+  final StrutStyle? strutStyle;
+  final TextStyle? style;
+  final TextAlignVertical? textAlignVertical;
+  final TextInputAction? textInputAction;
+  final TextDirection? textDirection;
+  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
+  final TextAlign textAlign;
+  final TextEditingController? controller;
 
   @override
   State<PrettyTextField> createState() => _PrettyTextFieldState();
 }
 
 class _PrettyTextFieldState extends State<PrettyTextField> {
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
       width: widget.width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.red)),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.red)),
       child: TextField(
         decoration: InputDecoration(
           border: InputBorder.none,
           labelText: widget.labelText,
         ),
-        controller: widget.controller,
+        controller: controller,
         textAlign: widget.textAlign,
         autocorrect: widget.autocorrect,
         autofillHints: widget.autofillHints,
@@ -159,49 +167,49 @@ class _PrettyTextFieldState extends State<PrettyTextField> {
         textAlignVertical: widget.textAlignVertical,
         textInputAction: widget.textInputAction,
         textDirection: widget.textDirection,
-        toolbarOptions: widget.toolbarOptions,
+        contextMenuBuilder: widget.contextMenuBuilder,
       ),
     );
   }
 }
 
 class ErrorTextField extends StatefulWidget {
-  ErrorTextField({
+  const ErrorTextField({
     Key? key,
     this.labelText,
     this.width,
-    this.autocorrect,
+    this.autocorrect = true,
     this.autofillHints,
-    this.autofocus,
+    this.autofocus = false,
     this.buildCounter,
-    this.clipBehavior,
+    this.clipBehavior = Clip.hardEdge,
     this.cursorColor,
     this.cursorHeight,
-    this.cursorWidth,
+    this.cursorWidth = 2.0,
     this.cursorRadius,
-    this.dragStartBehavior,
+    this.dragStartBehavior = DragStartBehavior.start,
     this.enabled,
-    this.enableIMEPersonalizedLearning,
+    this.enableIMEPersonalizedLearning = true,
     this.enableInteractiveSelection,
-    this.enableSuggestions,
-    this.expands,
+    this.enableSuggestions = true,
+    this.expands = false,
     this.focusNode,
     this.inputFormatters,
     this.keyboardAppearance,
     this.keyboardType,
     this.maxLength,
     this.maxLengthEnforcement,
-    this.maxLines,
+    this.maxLines = 1,
     this.minLines,
     this.mouseCursor,
-    this.obscureText,
-    this.obscuringCharacter,
+    this.obscureText = false,
+    this.obscuringCharacter = '•',
     this.onAppPrivateCommand,
     this.onChanged,
     this.onEditingComplete,
     this.onSubmitted,
     this.onTap,
-    this.scrollPadding,
+    this.scrollPadding = const EdgeInsets.all(20.0),
     this.scrollPhysics,
     this.showCursor,
     this.strutStyle,
@@ -209,55 +217,55 @@ class ErrorTextField extends StatefulWidget {
     this.textAlignVertical,
     this.textInputAction,
     this.textDirection,
-    this.toolbarOptions,
-    this.textAlign,
+    this.contextMenuBuilder,
+    this.textAlign = TextAlign.start,
+    this.controller,
   }) : super(key: key);
 
-  final labelText;
-  final width;
-  final autocorrect;
-  final autofillHints;
-  final autofocus;
-  final buildCounter;
-  final clipBehavior;
-  final cursorColor;
-  final cursorHeight;
-  final cursorWidth;
-  final cursorRadius;
-  final dragStartBehavior;
-  final enabled;
-  final enableIMEPersonalizedLearning;
-  final enableInteractiveSelection;
-  final enableSuggestions;
-  final expands;
-  final focusNode;
-  final inputFormatters;
-  final keyboardAppearance;
-  final keyboardType;
-  final maxLength;
-  final maxLengthEnforcement;
-  final maxLines;
-  final minLines;
-  final mouseCursor;
-  final obscureText;
-  final obscuringCharacter;
-  final onAppPrivateCommand;
-  final onChanged;
-  final onEditingComplete;
-  final onSubmitted;
-  final onTap;
-  final scrollPadding;
-  final scrollPhysics;
-  final showCursor;
-  final strutStyle;
-  final style;
-  final textAlignVertical;
-  final textInputAction;
-  final textDirection;
-  final toolbarOptions;
-  final textAlign;
-
-  final TextEditingController controller = TextEditingController();
+  final String? labelText;
+  final double? width;
+  final bool autocorrect;
+  final Iterable<String>? autofillHints;
+  final bool autofocus;
+  final Widget? Function(BuildContext, {required int currentLength, required bool isFocused, required int? maxLength})? buildCounter;
+  final Clip clipBehavior;
+  final Color? cursorColor;
+  final double? cursorHeight;
+  final double cursorWidth;
+  final Radius? cursorRadius;
+  final DragStartBehavior dragStartBehavior;
+  final bool? enabled;
+  final bool enableIMEPersonalizedLearning;
+  final bool? enableInteractiveSelection;
+  final bool enableSuggestions;
+  final bool expands;
+  final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
+  final Brightness? keyboardAppearance;
+  final TextInputType? keyboardType;
+  final int? maxLength;
+  final MaxLengthEnforcement? maxLengthEnforcement;
+  final int? maxLines;
+  final int? minLines;
+  final MouseCursor? mouseCursor;
+  final bool obscureText;
+  final String obscuringCharacter;
+  final void Function(String, Map<String, dynamic>)? onAppPrivateCommand;
+  final void Function(String)? onChanged;
+  final void Function()? onEditingComplete;
+  final void Function(String)? onSubmitted;
+  final void Function()? onTap;
+  final EdgeInsets scrollPadding;
+  final ScrollPhysics? scrollPhysics;
+  final bool? showCursor;
+  final StrutStyle? strutStyle;
+  final TextStyle? style;
+  final TextAlignVertical? textAlignVertical;
+  final TextInputAction? textInputAction;
+  final TextDirection? textDirection;
+  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
+  final TextAlign textAlign;
+  final TextEditingController? controller;
 
   @override
   State<ErrorTextField> createState() => _ErrorTextFieldState();
@@ -319,7 +327,7 @@ class _ErrorTextFieldState extends State<ErrorTextField> {
       textAlignVertical: widget.textAlignVertical,
       textInputAction: widget.textInputAction,
       textDirection: widget.textDirection,
-      toolbarOptions: widget.toolbarOptions,
+      contextMenuBuilder: widget.contextMenuBuilder,
     );
   }
 }
